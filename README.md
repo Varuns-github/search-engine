@@ -9,12 +9,12 @@ It has 2 endpoints for now both are GET, have not implemented POST or added any 
 
 1. Endpoint to get the search results for a query
 
-    /search?query=<query>
+    /search?query=[query]
 
     Pass the user query as argument to this endpoint
 
 2. Endpoint to return which result the user selected
 
-    /search/<query>?selection=<selected query id>
+    /search/[query]?selection=[selected query id]
 
     Pass the query as well as the selected query id
