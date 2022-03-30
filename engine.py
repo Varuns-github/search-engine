@@ -1,7 +1,12 @@
-from flask import Flask,jsonify,request
+from flask import Flask,jsonify,request,render_template
 
 # define the app
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+    # return index.html
+    return render_template('index.html')
 
 # dummy search results for now
 initial_search_results = [
