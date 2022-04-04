@@ -1,0 +1,130 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    height: 100%;     
+}
+*{
+  box-sizing: border-box;
+}
+
+.app-wrapper{
+    display: flex;
+    height: 100%;
+    flex-basis: 100%;
+    font-size: 12px;
+    flex-direction: column;
+    flex-wrap: wrap;
+   
+}
+.header-wrapper{
+  display: flex; 
+  height: 70px;
+  background: #00243d; 
+  font-size: 20px;
+  color: #fff;
+  align-items: center;
+  padding: 0 15px 0 15px;
+}
+
+.body-wrapper{
+  height: calc(100% - 70px);
+  display: flex;
+  /* background: #f3f3f7; */
+}
+
+.body-left{
+  display: flex;
+  flex-basis: 65%;
+  height: 100%;
+  padding: 20px;
+  flex-direction: column;
+}
+.search-cntr{
+display: flex;
+flex-direction: column;
+}
+.search-label{
+  color: #66666a;
+  font-weight: 600;
+  padding-bottom: 5px;
+}
+.input-cntr{
+  display: flex;
+}
+.search-box{
+height: 35px;
+width: 300px;
+outline: none;
+border:1px solid #84869d;
+border-radius: 2px;
+/* color: gray; */
+}
+.search-btn{
+  height: 35px;
+  background-color: #00243d;
+  color: #fff;
+  width: 75px;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.btn-cntr{
+  padding-left: 10px;
+}
+.result-wrapper{
+  padding-top: 25px;
+}
+.res-label{
+  color: #66666a;
+  font-weight: 700;
+  padding-bottom: 15px;
+}
+.result-rpt{
+  /* width: 40%; */
+  background: #fff;
+  font-size: 13px;
+  /* padding: 10px 10px; */
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
+  padding-bottom: 15px;
+}
+.res-link{
+  color: #3f3f42;
+}
+.body-right{
+  display: flex;
+  flex-basis: 35%;
+  height: 100%;
+  
+}
+a, u {
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: underline;
+}
+
+
+
+/* .mainLoginInput{
+  height: 40px;
+  padding: 0px;
+  font-size: 15px;
+  margin: 5px 0;
+}
+
+.mainLoginInput::-webkit-input-placeholder { 
+font-family: FontAwesome;
+font-weight: normal;
+overflow: visible;
+vertical-align: top;
+display: inline-block !important;
+padding-left: 5px;
+padding-top: 2px;
+color: hsl(252, 45%, 9%);
+} */

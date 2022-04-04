@@ -2,9 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FlaskBlog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 </head>
 <body>
-   <h1>Welcome to FlaskBlog</h1>
+   <div class="app-wrapper">
+     <div class="header-wrapper">
+        Search engine title goes here
+     </div>
+     <div class="body-wrapper">
+        <div class="body-left">
+          <div class="search-cntr">
+              <div class="search-label">
+                  Query
+              </div>
+              <div class="input-cntr">
+                <input type="text" class="search-box mainLoginInput" placeholder="Enter your query" name="searchBox"/>
+                <div class="btn-cntr">
+                    <button class="search-btn">Search</button>
+                </div>
+              </div>
+          </div> 
+          <div class="result-wrapper">
+
+           <div class="res-label">
+               {{len}} results found
+           </div> 
+           {%for i in range(0, len)%}
+           <div class="result-rpt">
+            <a href="results[i].url" class="res-link" >{{results[i].title}}</a>
+           </div>
+             {%endfor%}
+            <!-- <div class="result-rpt">
+                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
+            </div>
+            <div class="result-rpt">
+                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
+            </div>
+            <div class="result-rpt">
+                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
+            </div>
+            <div class="result-rpt">
+                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
+            </div> -->
+          </div> 
+        </div>
+        <div class="body-right">
+
+        </div>
+     </div>
+   </div>
 </body>
 </html>
+
+
