@@ -3,11 +3,6 @@ from flask import Flask,jsonify,request,render_template
 # define the app
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    # return index.html
-    return render_template('index.html')
-
 # dummy search results for now
 initial_search_results = [
     { "id": "1", "title": "The Shawshank Redemption", "url": "https://www.imdb.com/title/tt0111161/" },
@@ -15,6 +10,14 @@ initial_search_results = [
     { "id": "3", "title": "The Godfather: Part II", "url": "https://www.imdb.com/title/tt0071562/" },
     { "id": "4", "title": "The Dark Knight", "url": "https://www.imdb.com/title/tt0468569/" },
 ];
+
+len=len(initial_search_results)
+
+results=[]
+@app.route('/')
+def index():
+    # return index.html
+    return render_template('index.html',len=len,results=initial_search_results)
 
 # implement a list for caching results
 cached_results = []
