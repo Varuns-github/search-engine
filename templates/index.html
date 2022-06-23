@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        let query=""
+        function getSearchResult(){
+            query = document.getElementById("searchBox").value;
+            fetch(`http://127.0.0.1:5000/search?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                data.forEach((element, index) => {
+                    document.getElementById("resultFound").innerHTML="10 results found"
+                    document.getElementById(`myLink${index}`).innerHTML=element.title
+                    document.getElementById(`myLink${index}`).href=element.link
+                });
+            });
+        }
+
+        function provideSelection(event){
+            fetch(`http://127.0.0.1:5000/search/${query}?selection=${event.href}`);
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
@@ -12,7 +31,7 @@
 <body>
    <div class="app-wrapper">
      <div class="header-wrapper">
-        Search engine title goes here
+        Search Engine: Group 7
      </div>
      <div class="body-wrapper">
         <div class="body-left">
@@ -21,40 +40,60 @@
                   Query
               </div>
               <div class="input-cntr">
-                <input type="text" class="search-box mainLoginInput" placeholder="Enter your query" name="searchBox"/>
+                <input id="searchBox" type="text" class="search-box mainLoginInput" placeholder="Enter your query" name="searchBox"/>
                 <div class="btn-cntr">
-                    <button class="search-btn">Search</button>
+                    <button class="search-btn" onclick="getSearchResult()">Search</button>
                 </div>
               </div>
           </div> 
           <div class="result-wrapper">
 
-           <div class="res-label">
-               {{len}} results found
-           </div> 
-           {%for i in range(0, len)%}
-           <div class="result-rpt">
-            <a href="results[i].url" class="res-link" >{{results[i].title}}</a>
+           <div id="resultFound" class="res-label">
            </div>
-             {%endfor%}
-            <!-- <div class="result-rpt">
-                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
-            </div>
-            <div class="result-rpt">
-                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
-            </div>
-            <div class="result-rpt">
-                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
-            </div>
-            <div class="result-rpt">
-                <a href="#" class="res-link" >ewrew343rfedsfdstr3wrasrtewtwetrfdfdsfsduhfreywrhfsdjfaspojdpaswjrawoejfoszndk</a>
-            </div> -->
+           {%for i in range(0, 10)%}
+           <div class="result-rpt">
+            <a class="res-link" target="_blank" id="myLink{{i}}" onclick="provideSelection(this)"></a>
+           </div>
+           {%endfor%}
           </div> 
+          <!-- <div>
+            <div class="group-title">
+                Group Members
+            </div>
+            <div class="members">
+                Ayesha Zain Jaleel - 210774047
+            </div>
+            <div class="members">
+                Theerdha Sajimon - 210698905
+            </div>
+            <div class="members">
+                Vishnu Manohar - 210427822
+            </div>
+            <div class="members">
+                Varun - 210220256
+            </div>
+          </div> -->
         </div>
         <div class="body-right">
-
+            
         </div>
      </div>
+     <div class="bottom-cntr">
+         <div class="group-title-foot">
+            Group Members
+     </div>
+     <div class="members-foot">
+        Ayesha Zain Jaleel - 210774047
+    </div>
+    <div class="members-foot">
+        Theerdha Sajimon - 210698905
+    </div>
+    <div class="members-foot">
+        Vishnu Manohar - 210427822
+    </div>
+    <div class="members-foot">
+        Varun - 210220256
+    </div>
    </div>
 </body>
 </html>

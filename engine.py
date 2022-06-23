@@ -1,26 +1,18 @@
+import time
+from boolean_model import boolean_model
+from language_model import language_model
+from vector_space_model import vector_space_model
+from cache import add_to_cache, get_cached_results
+from evaluation import get_ground_truth, get_precision
 from flask import Flask,jsonify,request,render_template
+from helper import preprocess, get_dataset, get_list_of_documents
 
 # define the app
 app = Flask(__name__)
 
-# dummy search results for now
-initial_search_results = [
-    { "id": "1", "title": "The Shawshank Redemption", "url": "https://www.imdb.com/title/tt0111161/" },
-    { "id": "2", "title": "The Godfather", "url": "https://www.imdb.com/title/tt0068646/" },
-    { "id": "3", "title": "The Godfather: Part II", "url": "https://www.imdb.com/title/tt0071562/" },
-    { "id": "4", "title": "The Dark Knight", "url": "https://www.imdb.com/title/tt0468569/" },
-];
-
-len=len(initial_search_results)
-
-results=[]
 @app.route('/')
 def index():
-    # return index.html
-    return render_template('index.html',len=len,results=initial_search_results)
-
-# implement a list for caching results
-cached_results = []
+    return render_template('index.html')
 
 # endpoint to get the search results
 @app.route("/search", methods=["GET"])
@@ -29,47 +21,84 @@ def get_search_results():
     query = request.args.get("query")
 
     print(query, "user inputted search query")
-    # Pass the query to the retrieval models to get the search results
 
-    # check if the query is in the cache
-    for cache in cached_results:
-        if cache["query"] == query:
-            print("Found in cache")
-            return jsonify(cache["results"])
+    cache = get_cached_results(query)
 
-    # update as dummy for now
-    results = initial_search_results.copy()
+    if(cache):
+        return jsonify(cache)
 
-    # update the cached results with the query and the search results
-    cached_results.append({ "query": query, "results": results })
+    dataset = get_dataset('flights_tickets_serp2020-04-01_cleaned.csv')
+    documents = get_list_of_documents(dataset)
+    preprocessed_query = preprocess(query)
 
+    ground_truth = get_ground_truth(query, dataset)
+
+    # find the time taken to get the results from boolean model
+    boolean_start_time = time.time()
+    boolean_results = boolean_model(preprocessed_query, documents)
+    boolean_end_time = time.time()
+    boolean_precision = get_precision(ground_truth, boolean_results)
+
+    # find the time taken to get the results from language model
+    language_start_time = time.time()
+    language_model_results = language_model(preprocessed_query, documents)
+    language_end_time = time.time()
+    language_precision = get_precision(ground_truth, language_model_results)
+
+    # find the time taken to get the results from vector space model
+    vector_start_time = time.time()
+    vector_space_model_results = vector_space_model(preprocessed_query, documents)
+    vector_end_time = time.time()
+    vector_precision = get_precision(ground_truth, vector_space_model_results)
+
+    # print the time taken to get the results
+    print("Boolean model took", boolean_end_time - boolean_start_time, "seconds")
+    print("Language model took", language_end_time - language_start_time, "seconds")
+    print("Vector space model took", vector_end_time - vector_start_time, "seconds")
+
+    # print the precision of the results
+    print("Boolean model precision:", boolean_precision)
+    print("Language model precision:", language_precision)
+    print("Vector space model precision:", vector_precision)
+
+    # check which model has the highest precision
+    if(boolean_precision > language_precision and boolean_precision > vector_precision):
+        print("Boolean model has the highest precision, returning results")
+        results = boolean_results
+    elif(language_precision > boolean_precision and language_precision > vector_precision):
+        print("Language model has the highest precision, returning results")
+        results = language_model_results
+    else:
+        print("Vector space model has the highest precision, returning results")
+        results = vector_space_model_results
+
+    # add the results to the cache
+    add_to_cache(query, results)
+
+    # return the results
     return jsonify(results)
 
-# endpoint to get which movie user selected
+# endpoint to get which website user selected
 # This will be our evaluation endpoint
 @app.route("/search/<query>", methods=["GET"])
 def get_user_selected_search(query):
 
     user_input = request.args.get("selection")
-    print(user_input, "User selected this movie")
+    print(user_input, "User selected this website")
     
-    search_results = []
+    cache = get_cached_results(query)
 
-    # check if the query is in the cache
-    for cache in cached_results:
-        if cache["query"] == query:
-            print("Found in cache")
-            search_results = cache["results"]
-            for result in search_results:
-                # match the user selected movie with the search results
-                if result["id"] == user_input:
-                    # get the index of the selected movie
-                    search_index = search_results.index(result)
-                    # update the search results with the selected movie at the top
-                    search_results.insert(0, search_results.pop(search_index))
+    if(cache):
+        for result in cache:
+            # match the user selected website with the search results
+            if result["link"] == user_input:
+                # get the index of the selected website
+                search_index = cache.index(result)
+                # update the search results with the selected website at the top
+                cache.insert(0, cache.pop(search_index))
                     
     # update the cached results with the query and the search results
-    cached_results.append({ "query": query, "results": search_results })
+    add_to_cache(query, cache)
 
     return jsonify(status="success", user_input=user_input)
 

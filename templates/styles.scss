@@ -1,0 +1,17 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.app-wrapper{
+    display: flex;
+    height: 100%;
+    font-size: 12px;
+    .header-wrapper{
+      display: flex; 
+      height: 50px;
+      color: red; 
+    }
+}
